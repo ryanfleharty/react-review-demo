@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import './App.css';
 import AuthGateway from './AuthGateway/AuthGateway';
+import {Switch, Route, Link } from 'react-router-dom';
+import DrinkContainer from './DrinkContainer/DrinkContainer';
 
 class App extends Component {
   constructor(){
@@ -29,13 +31,41 @@ class App extends Component {
       })
   }
   }
+  handleLogin = async (formData) => {
+    console.log(formData)
+    try {
+      const loginResponse = await fetch("http://localhost:9000/users/login", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      const parsedLoginResponse = await loginResponse.json();
+      console.log(parsedLoginResponse);
+      if(parsedLoginResponse.status === 200){
+        this.setState({
+          loggedIn: true,
+          currentUser: parsedLoginResponse.data
+        })
+      } else {
+        console.log("Jake says you screwed up dummy!")
+      }
+
+    } catch(err){
+      console.log(err)
+    }
+  }
   render(){
     return (
       <div className="App">
         {this.state.loggedIn ? 
-        <h1>YOURE LOGGED IN</h1>
+        <Switch>
+          <Route exact path="/" component={DrinkContainer} />
+        </Switch>
       :
-        <AuthGateway handleRegister = {this.handleRegister}></AuthGateway>}
+        <AuthGateway handleLogin={this.handleLogin} handleRegister = {this.handleRegister}></AuthGateway>}
       </div>
     );
   }

@@ -32,7 +32,9 @@ app.use((req, res, next)=>{
 })
 
 const userController = require('./controllers/UserController');
+const drinkController = require('./controllers/DrinkController'); 
 app.use('/users', userController);
+app.use('/drinks', drinkController);
 
 app.listen(process.env.PORT || 9000, ()=>{
     console.log("ITS ALIIIIVE")

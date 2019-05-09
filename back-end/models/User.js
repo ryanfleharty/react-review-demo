@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    password: String
+    password: String,
+    drinksCreated: [{type: mongoose.Schema.Types.ObjectId, ref: "Drink"}]
 })
 
 const User = mongoose.model('User', userSchema);

@@ -5,7 +5,28 @@ const bcrypt = require('bcryptjs');
 router.get("/", (req, res)=>{
     res.send("HELLO");
 })
-
+router.post('/login', async (req, res) => {
+    try{
+        const foundUser = await User.findOne({username : req.body.username});
+        if(foundUser){
+            if(bcrypt.compareSync(req.body.password, foundUser.password) === true){
+                req.session.logged = true;
+                req.session.username = req.body.username;
+                res.json({
+                           status: 200,
+                           data: foundUser
+                })         
+            }
+        }
+        res.send({
+            status: 500,
+            data: "No such user or password"
+        })
+    }catch(err){
+        console.log(err);
+        res.send(err);
+    }
+})
 router.post("/", async (req, res)=>{
     try{
         const hashedPassword = bcrypt.hashSync(req.body.password, 10);

@@ -2,6 +2,7 @@ import React from 'react';
 import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap';
 import './style.css';
 import RegistrationForm from './RegistrationForm/RegistrationForm';
+import LoginForm from './LoginForm/LoginForm';
 export default class AuthGateway extends React.Component {
   constructor(props) {
     super(props);
@@ -44,11 +45,7 @@ export default class AuthGateway extends React.Component {
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
           <TabPane tabId="1">
-              <form>
-                  Username: <input type="text" name="username"/>
-                  <br></br>
-                  Password: <input type="password" name="password"/>
-              </form>
+              <LoginForm handleLogin={this.props.handleLogin}></LoginForm>
           </TabPane>
           <TabPane tabId="2">
             <RegistrationForm handleRegister={this.props.handleRegister}></RegistrationForm>
