@@ -46,5 +46,19 @@ router.post("/", async (req, res)=>{
         })
     }
 })
+router.get("/current", async (req, res)=>{
+    if(req.session.userId !== undefined){
+        const user = await User.findById(req.session.userId);
+        res.json({
+            status: 200,
+            data: user
+        })
+    }else{
+        res.json({
+            status: 404,
+            data: "nobody logged in"
+        })
+    }
+})
 
 module.exports = router;

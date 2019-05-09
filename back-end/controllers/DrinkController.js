@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Drink = require('../models/Drink');
+const User = require('../models/User');
 
 router.get("/", async (req, res)=>{
     try{
@@ -15,6 +16,18 @@ router.get("/", async (req, res)=>{
         })
     }
 
+})
+
+router.post("/", async (req, res) => {
+    console.log(req.body);
+    const newDrink = await Drink.create(req.body);
+    const user = await User.findById(req.session.userId);
+    user.drinksCreated.push(newDrink._id);
+    await user.save()
+    res.json({
+        status: 200,
+        data: newDrink
+    })
 })
 
 module.exports = router;

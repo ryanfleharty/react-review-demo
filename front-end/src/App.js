@@ -12,6 +12,21 @@ class App extends Component {
       currentUser: null
     }
   }
+  componentDidMount(){
+    this.checkForUser()
+  }
+  checkForUser = async () => {
+    const currentUser = await fetch("http://localhost:9000/users/current", {
+      credentials: 'include'
+    })
+    const parsedResponse = await currentUser.json();
+    if(parsedResponse.status === 200){
+      this.setState({
+        loggedIn: true,
+        currentUser: parsedResponse.data
+      })
+    }
+  }
   handleRegister = async (formData) => {
     console.log(formData);
     const response = await fetch("http://localhost:9000/users", {
@@ -63,6 +78,7 @@ class App extends Component {
         {this.state.loggedIn ? 
         <Switch>
           <Route exact path="/" component={DrinkContainer} />
+          <Route path="/drinks" component={DrinkContainer} />
         </Switch>
       :
         <AuthGateway handleLogin={this.handleLogin} handleRegister = {this.handleRegister}></AuthGateway>}
